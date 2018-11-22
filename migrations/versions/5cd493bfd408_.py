@@ -1,16 +1,16 @@
 """empty message
 
-Revision ID: 82c881bc84ac
+Revision ID: 5cd493bfd408
 Revises: 
-Create Date: 2018-11-18 18:24:19.556557
+Create Date: 2018-11-22 22:30:08.175932
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '82c881bc84ac'
+revision = '5cd493bfd408'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -44,14 +44,14 @@ def upgrade():
     sa.Column('content', sa.Text(), nullable=True),
     sa.Column('type', sa.String(length=50), nullable=True),
     sa.Column('idSurvey', sa.Integer(), nullable=True),
-    sa.Column('replyContent', sa.Text(), nullable=True),
+    sa.Column('replyContent', postgresql.JSON(astext_type=sa.Text()), nullable=True),
     sa.ForeignKeyConstraint(['idSurvey'], ['surveys.idSurvey'], ),
     sa.PrimaryKeyConstraint('idQuestion')
     )
     op.create_table('replies',
     sa.Column('idReply', sa.Integer(), nullable=False),
     sa.Column('idQuestion', sa.Integer(), nullable=True),
-    sa.Column('reply', sa.Text(), nullable=True),
+    sa.Column('reply', postgresql.JSON(astext_type=sa.Text()), nullable=True),
     sa.ForeignKeyConstraint(['idQuestion'], ['questions.idQuestion'], ),
     sa.PrimaryKeyConstraint('idReply')
     )

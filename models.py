@@ -1,8 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.dialects.postgresql import JSON
 import datetime
 
 db = SQLAlchemy()
-
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -37,7 +37,7 @@ class Question(db.Model):
     content = db.Column(db.Text)
     type = db.Column(db.String(50), unique=False)
     idSurvey = db.Column(db.Integer, db.ForeignKey('surveys.idSurvey'))
-    replyContent = db.Column(db.Text)
+    replyContent = db.Column(JSON)
 
     replies = db.relationship('Reply', backref='questions', lazy=True)
 
@@ -48,7 +48,7 @@ class Reply(db.Model):
     __tablename__ = 'replies'
     idReply = db.Column(db.Integer, primary_key=True)
     idQuestion = db.Column(db.Integer, db.ForeignKey('questions.idQuestion'))
-    reply = db.Column(db.Text)
+    reply = db.Column(JSON)
 
     def __repr__(self):
         return '<Question %r>' % self.content
