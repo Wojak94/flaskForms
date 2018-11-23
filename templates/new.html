@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+   <body>
+      <h3>SurveyLand Database Test</h3>
+      <hr/>
+
+      {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+      {%- endfor %}
+
+      <form action = "{{ request.path }}" method = "post">
+         <label for = "login">Login</label><br>
+         <input type = "text" name = "login" placeholder = "Login" /><br>
+         <label for = "email">Email</label><br>
+         <input type = "text" name = "email" placeholder = "Email" /><br>
+         <label for = "paswd">Password</label><br>
+         <input type = "text" name = "paswd" placeholder = "Password" /><br><br>
+         <input type = "submit" value = "Submit" />
+      </form>
+   </body>
+</html>

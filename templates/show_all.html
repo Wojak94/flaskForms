@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+      <h3>
+         <a href = "{{ url_for('show_all') }}">SurveyLand Database Test</a>
+      </h3>
+
+      <hr/>
+      {%- for message in get_flashed_messages() %}
+         <font color="blue ">{{ message }}</font>
+      {%- endfor %}
+
+      <h3>Users (<a href = "{{ url_for('new') }}">Add User</a>)</h3>
+
+      <table>
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>Email</th>
+               <th>Password</th>
+            </tr>
+         </thead>
+
+         <tbody>
+            {% for user in users %}
+               <tr>
+                  <td>{{ user.login }}</td>
+                  <td>{{ user.mail }}</td>
+                  <td>{{ user.paswd }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+   </body>
+</html>
