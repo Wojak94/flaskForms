@@ -44,7 +44,6 @@ def new():
          return redirect(url_for('show_all'))
    return render_template('new.html')
 
-
 import models, resources
 
 api.add_resource(resources.UserRegistration, '/register')

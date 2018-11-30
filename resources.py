@@ -4,18 +4,24 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
 
 parser = reqparse.RequestParser()
 parser.add_argument('username', help = 'This field cannot be blank', required = True)
+parser.add_argument('email', help = 'This field cannot be blank', required = True)
 parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
 
 class UserRegistration(Resource):
     def post(self):
         data = parser.parse_args()
+        data = parser.parse_args()
 
         if User.find_by_username(data['username']):
             return {'message': 'User {} already exists'.format(data['username'])}
 
+        if User.find_by_email(data['email']):
+            return {'message': 'User with email {} already exists'.format(data['email'])}
+
         new_user = User(
             login = data['username'],
+            mail = data['email'],
             paswd = User.generate_hash(data['password'])
         )
 

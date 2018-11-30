@@ -23,6 +23,10 @@ class User(db.Model):
         return cls.query.filter_by(login = login).first()
 
     @classmethod
+    def find_by_email(cls, email):
+        return cls.query.filter_by(mail = email).first()
+
+    @classmethod
     def return_all(cls):
         def to_json(x):
             return {
