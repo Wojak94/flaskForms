@@ -1,34 +1,35 @@
 # flaskForms
+### Current API endpoints:
 
-###Current API endpoints:
 * /register
 * /login
 * /logout/access
 * /logout/refresh
 * /token/refresh
 * /users
-###Usage:
-* ####/register:
+
+### Usage:
+* #### /register:
 ```
 curl -H "Content-Type: application/json" -X POST -d '{"username":"user","email":"test","password":"test"}' https://surveyland.herokuapp.com/register
 ```
-* ####/login:
+* #### /login:
 ```
 curl -H "Content-Type: application/json" -X POST -d '{"username":"user","password":"test"}' https://surveyland.herokuapp.com/login
 ```
-* ####/logout/access:
+* #### /logout/access:
 ```
 curl -H "Authorization: Bearer {access_token}" -X POST https://surveyland.herokuapp.com/logout/access
 ```
-* ####/logout/refresh:
+* #### /logout/refresh:
 ```
 curl -H "Authorization: Bearer {refresh_token}" -X POST https://surveyland.herokuapp.com/logout/refresh
 ```
-* ####/token/refresh:
+* #### /token/refresh:
 ```
 curl -H "Authorization: Bearer {refresh_token}" -X POST https://surveyland.herokuapp.com/token/refresh
 ```
-* ####/users:
+* #### /users:
 ```
 curl -H "Content-Type: application/json" -X GET https://surveyland.herokuapp.com/users
 ```
