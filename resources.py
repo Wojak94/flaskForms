@@ -2,15 +2,15 @@ from flask_restful import Resource, reqparse
 from models import User, RevokedTokenModel
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
-parser = reqparse.RequestParser()
-parser.add_argument('username', help = 'This field cannot be blank', required = True)
-parser.add_argument('email', help = 'This field cannot be blank', required = True)
-parser.add_argument('password', help = 'This field cannot be blank', required = True)
-
-
 class UserRegistration(Resource):
+
     def post(self):
-        data = parser.parse_args()
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('username', help = 'This field cannot be blank', required = True)
+        parser.add_argument('email', help = 'This field cannot be blank', required = True)
+        parser.add_argument('password', help = 'This field cannot be blank', required = True)
+        
         data = parser.parse_args()
 
         if User.find_by_username(data['username']):
@@ -39,7 +39,13 @@ class UserRegistration(Resource):
 
 
 class UserLogin(Resource):
+
     def post(self):
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('username', help = 'This field cannot be blank', required = True)
+        parser.add_argument('password', help = 'This field cannot be blank', required = True)
+
         data = parser.parse_args()
         current_user = User.find_by_username(data['username'])
 
