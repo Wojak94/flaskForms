@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import JSON
 import datetime
+from passlib.hash import pbkdf2_sha256 as sha256
 
 db = SQLAlchemy()
 
@@ -9,9 +10,34 @@ class User(db.Model):
     idUser = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(80), unique=True)
     mail = db.Column(db.String(120), unique=True)
-    paswd = db.Column(db.String(50), unique=False)
+    paswd = db.Column(db.String(120), unique=False)
 
     surveys = db.relationship('Survey', backref='users', lazy=True)
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def find_by_username(cls, login):
+        return cls.query.filter_by(login = login).first()
+
+    @classmethod
+    def return_all(cls):
+        def to_json(x):
+            return {
+                'username': x.login,
+                'password': x.paswd
+            }
+        return {'users': list(map(lambda x: to_json(x), User.query.all()))}
+
+    @staticmethod
+    def generate_hash(password):
+        return sha256.hash(password)
+
+    @staticmethod
+    def verify_hash(password, hash):
+        return sha256.verify(password, hash)
 
     def __repr__(self):
         return '<User %r>' % self.login
@@ -52,3 +78,17 @@ class Reply(db.Model):
 
     def __repr__(self):
         return '<Question %r>' % self.content
+
+class RevokedTokenModel(db.Model):
+    __tablename__ = 'revoked_tokens'
+    id = db.Column(db.Integer, primary_key = True)
+    jti = db.Column(db.String(120))
+
+    def add(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def is_jti_blacklisted(cls, jti):
+        query = cls.query.filter_by(jti = jti).first()
+        return bool(query)
