@@ -9,7 +9,7 @@ class User(db.Model):
     __tablename__ = 'users'
     idUser = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(80), unique=True)
-    mail = db.Column(db.String(120), unique=True)
+    email = db.Column(db.String(120), unique=True)
     paswd = db.Column(db.String(120), unique=False)
 
     surveys = db.relationship('Survey', backref='users', lazy=True)
@@ -24,7 +24,7 @@ class User(db.Model):
 
     @classmethod
     def find_by_email(cls, email):
-        return cls.query.filter_by(mail = email).first()
+        return cls.query.filter_by(email = email).first()
 
     @classmethod
     def return_all(cls):
@@ -58,14 +58,18 @@ class User(db.Model):
 class Survey(db.Model):
     __tablename__ = 'surveys'
     idSurvey = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True)
+    name = db.Column(db.String(80))
     desc = db.Column(db.Text, unique=False)
     idUser = db.Column(db.Integer, db.ForeignKey('users.idUser'))
-    isActive = db.Column(db.Boolean)
-    subCount = db.Column(db.Integer)
+    isActive = db.Column(db.Boolean, default=0)
+    subCount = db.Column(db.Integer, default=0)
     dueDate = db.Column(db.DateTime)
 
     questions = db.relationship('Question', backref='surveys', lazy=True)
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
 
     def __repr__(self):
         return '<Survey %r>' % self.name

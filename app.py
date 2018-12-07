@@ -35,7 +35,7 @@ def new():
       if not request.form['login'] or not request.form['email'] or not request.form['paswd']:
          flash('Please enter all the fields', 'error')
       else:
-         user = User(login=request.form['login'], mail=request.form['email'],
+         user = User(login=request.form['login'], email=request.form['email'],
             paswd=request.form['paswd'])
 
          db.session.add(user)
@@ -52,6 +52,7 @@ api.add_resource(resources.UserLogoutAccess, '/logout/access')
 api.add_resource(resources.UserLogoutRefresh, '/logout/refresh')
 api.add_resource(resources.TokenRefresh, '/token/refresh')
 api.add_resource(resources.AllUsers, '/users')
+api.add_resource(resources.SurveyAdd, '/addsurvey')
 
 if __name__ == '__main__':
     app.run()

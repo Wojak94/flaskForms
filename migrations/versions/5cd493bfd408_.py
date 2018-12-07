@@ -21,11 +21,11 @@ def upgrade():
     op.create_table('users',
     sa.Column('idUser', sa.Integer(), nullable=False),
     sa.Column('login', sa.String(length=80), nullable=True),
-    sa.Column('mail', sa.String(length=120), nullable=True),
+    sa.Column('email', sa.String(length=120), nullable=True),
     sa.Column('paswd', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('idUser'),
     sa.UniqueConstraint('login'),
-    sa.UniqueConstraint('mail')
+    sa.UniqueConstraint('email')
     )
     op.create_table('surveys',
     sa.Column('idSurvey', sa.Integer(), nullable=False),
