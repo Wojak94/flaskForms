@@ -12,7 +12,7 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
 -----|--------|------------------|----------
 /register | POST | None | User registration
 /login | POST | None | User login
-/logout/access | POST | Access token | User logout of access token
+[/logout/access](https://github.com/Wojak94/flaskForms/blob/master/README.md#logoutaccess) | POST | Access token | User logout of access token
 /logout/refresh |  POST | Refresh token | User logout of refresh token
 /token/refresh | POST | Refresh token | Obtaining new access token with refresh token
 /addsurvey | POST | Access token | Adding new survey
