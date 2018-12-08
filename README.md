@@ -10,13 +10,13 @@ Accessing token&#8209;protected endpoints requires `Authorization` parameter in 
 
 PATH | METHOD | TOKEN PROTECTION | PURPOSE
 -----|--------|------------------|----------
-/register | POST | None | User registration
-/login | POST | None | User login
+[/register](https://github.com/Wojak94/flaskForms/blob/master/README.md#register) | POST | None | User registration
+[/login](https://github.com/Wojak94/flaskForms/blob/master/README.md#login) | POST | None | User login
 [/logout/access](https://github.com/Wojak94/flaskForms/blob/master/README.md#logoutaccess) | POST | Access token | User logout of access token
-/logout/refresh |  POST | Refresh token | User logout of refresh token
-/token/refresh | POST | Refresh token | Obtaining new access token with refresh token
-/addsurvey | POST | Access token | Adding new survey
-/users | GET/DELETE | None | Getting list of/deleting all users (debug/development usage)
+[/logout/refresh](https://github.com/Wojak94/flaskForms/blob/master/README.md#logoutrefresh) |  POST | Refresh token | User logout of refresh token
+[/token/refresh](https://github.com/Wojak94/flaskForms/blob/master/README.md#tokenrefresh) | POST | Refresh token | Obtaining new access token with refresh token
+[/addsurvey](https://github.com/Wojak94/flaskForms/blob/master/README.md#addsurvey) | POST | Access token | Adding new survey
+[/users](https://github.com/Wojak94/flaskForms/blob/master/README.md#users) | GET/DELETE | None | Getting list of/deleting all users (debug/development usage)
 
 ## Usage
 
