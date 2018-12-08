@@ -2,11 +2,11 @@
 Backend for survey creation application written in Flask and Flask-sqlalchemy, deployed on heroku. Contains database models for PostgreSQL and REST API endpoints for communication with frontend.
 
 
-## API architecture:
+## API architecture
 API is written with Flask-RESTful library, providing user authentication with Flask-JWT-extended. Upon user registrarion/login 2 tokens are created: access and refresh, that lasts 15 min and 30 days respectivly.
 Accessing token&#8209;protected endpoints requires `Authorization` parameter in header of https request, with `Bearer {token}` value. Request parameters should be passed in header section.
 
-## Current API endpoints:
+## Current API endpoints
 
 PATH | METHOD | PURPOSE
 -----|--------|---------
@@ -18,7 +18,8 @@ PATH | METHOD | PURPOSE
 /addsurvey | POST | Adding new survey
 /users | GET/DELETE | Getting list of/deleting all users (debug/development usage)
 
-## Usage:
+## Usage
+
 ### /register:
 
 #### Accepted parameters:
@@ -30,12 +31,12 @@ PATH | METHOD | PURPOSE
 * Success:
    
         message: "User {username} was created"
-        access token
-        refresh token
+        access_token: {access_token}
+        refresh_token: {refresh_token}
   
 * Failure:
 
-        message: "Something went wrong"
+        message: "Something went wrong" (Probably database access or token creation error)
 ----------------------
 ### /login:
 
@@ -47,8 +48,8 @@ PATH | METHOD | PURPOSE
 * Success:
 
         message: "Logged in as {username}"
-        access token
-        refresh token
+        access_token: {access_token}
+        refresh_token: {refresh_token}
   
 * Failure:
 
@@ -70,7 +71,7 @@ PATH | METHOD | PURPOSE
         message: "Something went wrong" (probably database access error)
 ----------------------    
 ### /logout/refresh:
-  
+
 #### Required tokens:
     refresh token
     
@@ -84,8 +85,32 @@ PATH | METHOD | PURPOSE
         message: "Something went wrong" (probably database access error)
 ----------------------    
 ### /token/refresh:
+#### Required tokens:
+    refresh token
+    
+#### Returned json:
+    access_token: {access_token}    
 ----------------------
 ### /addsurvey:
+
+#### Required tokens:
+    refresh token
+    
+#### Accepted parameters:
+    name (required)
+    desc
+    duedate (required)
+    isactive
+#### Returned json:
+* Success:
+
+        message: "Survey {name} was created"
+* Failure:
+    
+        message: "Something went wrong" (probably database access error)
 ----------------------
 ### /users:
+
+No parameters required, just plain GET/DELETE request.
+
 ----------------------
