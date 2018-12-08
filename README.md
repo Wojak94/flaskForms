@@ -13,54 +13,54 @@
 #### /register:
 
   ##### Accepted parameters:
-    * *username* (**required**)
-    * *email* (**required**)
-    * *password* (**required**)
+    username (required)
+    email (required)
+    password (required)
     
   ##### Returned json (success):
-    * *message* "User {username} was created"
-    * *access token*
-    * *refresh token*
+    message "User {username} was created"
+    access token
+    refresh token
   
   ##### Returned json (failure):
-    * message "Something went wrong"
+    message "Something went wrong"
 ----------------------
 #### /login:
 
   ##### Accepted parameters:
-    * *username* (**required**)
-    * *password* (**required**)
+    username (required)
+    password (required)
     
   ##### Returned json (success):
-    * *message* "Logged in as <username>"
-    * *access token*
-    * *refresh token*
+    message "Logged in as <username>"
+    access token
+    refresh token
   
   ##### Returned json (failure):
-    * *message* "User {username} doesn't exist" (cannot find user by username)
-    * *message* "Wrong credentials" (password doesn't match specified username)
+    message "User {username} doesn't exist" (cannot find user by username)
+    message "Wrong credentials" (password doesn't match specified username)
 ----------------------   
 #### /logout/access:
   
   ##### Required tokens:
-    * *access token*
+    access token
     
   ##### Returned json (success):
-    * *message* "Access token has been revoked"
+    message "Access token has been revoked"
     
   ##### Returned json (failure):
-    * *message* "Something went wrong" (probably database access error)
+    message "Something went wrong" (probably database access error)
 ----------------------    
 #### /logout/refresh:
   
   ##### Required tokens:
-    * *refresh token*
+    refresh token
     
   ##### Returned json (success):
-    * *message* "Refresh token has been revoked"
+    message "Refresh token has been revoked"
     
   ##### Returned json (failure):
-    * *message* "Something went wrong" (probably database access error)
+    message "Something went wrong" (probably database access error)
 ----------------------    
 #### /token/refresh:
 ----------------------
