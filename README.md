@@ -7,29 +7,64 @@
 * /logout/refresh
 * /token/refresh
 * /users
+* /addsurvey
 
 ### Usage:
 * #### /register:
-```
-curl -H "Content-Type: application/json" -X POST -d '{"username":"user","email":"test","password":"test"}' https://surveyland.herokuapp.com/register
-```
+
+  Accepted parameters:
+    * *username* (**required**)
+    * *email* (**required**)
+    * *password* (**required**)
+    
+  Returned json (success):
+    * *message* "User {username} was created"
+    * *access token*
+    * *refresh token*
+  
+  Returned json (failure):
+    * message "Something went wrong"
+
 * #### /login:
-```
-curl -H "Content-Type: application/json" -X POST -d '{"username":"user","password":"test"}' https://surveyland.herokuapp.com/login
-```
+
+  Accepted parameters:
+    * *username* (**required**)
+    * *password* (**required**)
+    
+  Returned json (success):
+    * *message* "Logged in as <username>"
+    * *access token*
+    * *refresh token*
+  
+  Returned json (failure):
+    * *message* "User {username} doesn't exist" (cannot find user by username)
+    * *message* "Wrong credentials" (password doesn't match specified username)
+    
 * #### /logout/access:
-```
-curl -H "Authorization: Bearer {access_token}" -X POST https://surveyland.herokuapp.com/logout/access
-```
+  
+  Required tokens:
+    * *access token*
+    
+  Returned json (success):
+    * *message* "Access token has been revoked"
+    
+  Returned json (failure):
+    * *message* "Something went wrong" (probably database access error)
+
 * #### /logout/refresh:
-```
-curl -H "Authorization: Bearer {refresh_token}" -X POST https://surveyland.herokuapp.com/logout/refresh
-```
+  
+  Required tokens:
+    * *refresh token*
+    
+  Returned json (success):
+    * *message* "Refresh token has been revoked"
+    
+  Returned json (failure):
+    * *message* "Something went wrong" (probably database access error)
+    
 * #### /token/refresh:
-```
-curl -H "Authorization: Bearer {refresh_token}" -X POST https://surveyland.herokuapp.com/token/refresh
-```
+
 * #### /users:
-```
-curl -H "Content-Type: application/json" -X GET https://surveyland.herokuapp.com/users
-```
+
+* #### /addsurvey:
+
