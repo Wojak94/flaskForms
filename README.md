@@ -58,9 +58,6 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
 
 ### /logout/access:
   
-#### Required tokens:
-    access token
-    
 #### Returned json:
 * Success:
 
@@ -71,9 +68,6 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
         message: "Something went wrong" (probably database access error)
    
 ### /logout/refresh:
-
-#### Required tokens:
-    refresh token
     
 #### Returned json:
 * Success:
@@ -85,16 +79,11 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
         message: "Something went wrong" (probably database access error)
 
 ### /token/refresh:
-#### Required tokens:
-    refresh token
-    
+
 #### Returned json:
     access_token: {access_token}    
 
 ### /addsurvey:
-
-#### Required tokens:
-    refresh token
     
 #### Accepted parameters:
     name (required)
