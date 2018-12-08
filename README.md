@@ -10,7 +10,7 @@
 * /addsurvey
 
 ### Usage:
-* #### /register:
+#### /register:
 
   ##### Accepted parameters:
     * *username* (**required**)
@@ -24,8 +24,8 @@
   
   ##### Returned json (failure):
     * message "Something went wrong"
-
-* #### /login:
+----------------------
+#### /login:
 
   ##### Accepted parameters:
     * *username* (**required**)
@@ -39,8 +39,8 @@
   ##### Returned json (failure):
     * *message* "User {username} doesn't exist" (cannot find user by username)
     * *message* "Wrong credentials" (password doesn't match specified username)
-    
-* #### /logout/access:
+----------------------   
+#### /logout/access:
   
   ##### Required tokens:
     * *access token*
@@ -50,8 +50,8 @@
     
   ##### Returned json (failure):
     * *message* "Something went wrong" (probably database access error)
-
-* #### /logout/refresh:
+----------------------    
+#### /logout/refresh:
   
   ##### Required tokens:
     * *refresh token*
@@ -61,10 +61,10 @@
     
   ##### Returned json (failure):
     * *message* "Something went wrong" (probably database access error)
-    
-* #### /token/refresh:
-
-* #### /users:
-
-* #### /addsurvey:
-
+----------------------    
+#### /token/refresh:
+----------------------
+#### /users:
+----------------------
+#### /addsurvey:
+----------------------
