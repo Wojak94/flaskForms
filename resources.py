@@ -112,15 +112,15 @@ class SurveyAdd(Resource):
             name = data['name'],
             desc = data['desc'],
             dueDate = data['duedate'],
-            isActive = data['isactive'],
+            isActive = data['isactive'] if hasattr(data, 'isactive') else False,
             idUser = u.idUser
         )
 
-        print('isactive {}'.format(data['isactive']))
+        print('new_survey {}'.format(new_survey.isActive))
 
         try:
             new_survey.save_to_db()
-            return {'message': 'Survey "{}" was created'.format(data['name'])}
+            return {'message': 'Survey {} was created'.format(data['name'])}
         except:
             return {'message': 'Something went wrong'}, 500
 

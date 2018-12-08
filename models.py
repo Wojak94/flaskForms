@@ -59,9 +59,9 @@ class Survey(db.Model):
     __tablename__ = 'surveys'
     idSurvey = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    desc = db.Column(db.Text, unique=False)
+    desc = db.Column(db.Text)
     idUser = db.Column(db.Integer, db.ForeignKey('users.idUser'))
-    isActive = db.Column(db.Boolean, default=0)
+    isActive = db.Column(db.Boolean, default=False)
     subCount = db.Column(db.Integer, default=0)
     dueDate = db.Column(db.DateTime)
 
@@ -78,7 +78,7 @@ class Question(db.Model):
     __tablename__ = 'questions'
     idQuestion = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
-    type = db.Column(db.String(50), unique=False)
+    type = db.Column(db.String(50))
     idSurvey = db.Column(db.Integer, db.ForeignKey('surveys.idSurvey'))
     replyContent = db.Column(JSON)
 
