@@ -116,8 +116,6 @@ class SurveyAdd(Resource):
             idUser = u.idUser
         )
 
-        print('new_survey {}'.format(new_survey.isActive))
-
         try:
             new_survey.save_to_db()
             return {'message': 'Survey {} was created'.format(data['name'])}
