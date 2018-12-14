@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 from models import User, Survey, RevokedTokenModel
+from flask import jsonify
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
 class UserRegistration(Resource):
@@ -92,6 +93,16 @@ class TokenRefresh(Resource):
         current_user = get_jwt_identity()
         access_token = create_access_token(identity = current_user)
         return {'access_token': access_token}
+
+class SurveyGet(Resource):
+    @jwt_required
+    def get(self):
+        current_username = get_jwt_identity()
+        u = User.find_by_username(current_username)
+        user_surveys = Survey.query.filter_by(idUser = u.idUser).all()
+        if not user_surveys:
+            return {'message': f'User {current_username} has no surveys'}
+        return jsonify(surveys=[i.serialize for i in user_surveys])
 
 
 class SurveyAdd(Resource):

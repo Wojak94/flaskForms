@@ -59,13 +59,23 @@ class Survey(db.Model):
     __tablename__ = 'surveys'
     idSurvey = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    desc = db.Column(db.Text)
+    desc = db.Column(db.Text, default='Add description!')
     idUser = db.Column(db.Integer, db.ForeignKey('users.idUser'))
     isActive = db.Column(db.Boolean, default=False)
     subCount = db.Column(db.Integer, default=0)
     dueDate = db.Column(db.DateTime)
 
     questions = db.relationship('Question', backref='surveys', lazy=True)
+
+    @property
+    def serialize(self):
+        return {
+            'name': self.name,
+            'isActive': self.isActive,
+            'dueDate': self.dueDate,
+            'subCount': self.subCount,
+            'desc': self.desc
+        }
 
     def save_to_db(self):
         db.session.add(self)
