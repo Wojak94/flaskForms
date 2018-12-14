@@ -16,7 +16,8 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
 [/logout/refresh](https://github.com/Wojak94/flaskForms/blob/master/README.md#logoutrefresh) |  POST | Refresh token | User logout of refresh token
 [/token/refresh](https://github.com/Wojak94/flaskForms/blob/master/README.md#tokenrefresh) | POST | Refresh token | Obtaining new access token with refresh token
 [/addsurvey](https://github.com/Wojak94/flaskForms/blob/master/README.md#addsurvey) | POST | Access token | Adding new survey
-[/getsurvey](https://github.com/Wojak94/flaskForms/blob/master/README.md#getsurvey) | GET | Access token | Getting list of logged user surveys
+[/getsurveys](https://github.com/Wojak94/flaskForms/blob/master/README.md#getsurveys) | GET | Access token | Getting list of logged user surveys
+[/activesurveys](https://github.com/Wojak94/flaskForms/blob/master/README.md#activesurveys) | GET | None | Getting list of all active surveys
 [/users](https://github.com/Wojak94/flaskForms/blob/master/README.md#users) | GET/DELETE | None | Getting list of/deleting all users (debug/development usage)
 
 ## Usage
@@ -99,7 +100,7 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
     
         message: "Something went wrong" (probably database access error)
         
-### /getsurvey:
+### /getsurveys:
     
 #### Returned json:
 * Success:
@@ -116,6 +117,25 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
 * Failure:
     
         message: "User {username} has no surveys"
+        
+### /activesurveys:
+    
+#### Returned json:
+* Success:
+
+        surveys: [
+                    {
+                        name: {name},
+                        isActive: {isActive},
+                        dueDate: {dueDate},
+                        subCount: {subCount},
+                        desc: {desc}
+                    }, ...
+                 ]  
+* Failure:
+    
+        message: "There are no active surveys"
+        
 
 
 ### /users:
