@@ -61,7 +61,7 @@ class Survey(db.Model):
     name = db.Column(db.String(80))
     desc = db.Column(db.Text, default='Add description!')
     idUser = db.Column(db.Integer, db.ForeignKey('users.idUser'))
-    isActive = db.Column(db.Boolean, default=False)
+    isActive = db.Column(db.Boolean)
     subCount = db.Column(db.Integer, default=0)
     dueDate = db.Column(db.DateTime)
 

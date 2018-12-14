@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 from models import User, Survey, RevokedTokenModel
+from datetime import datetime
 from flask import jsonify
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
@@ -104,6 +105,12 @@ class SurveyGet(Resource):
             return {'message': f'User {current_username} has no surveys'}
         return jsonify(surveys=[i.serialize for i in user_surveys])
 
+class SurveyActive(Resource):
+    def get(self):
+        active_surveys = Survey.query.filter(Survey.isActive == True, Survey.dueDate > datetime.now()).all()
+        if not active_surveys:
+            return {'message': 'There is no active surveys'}
+        return jsonify(surveys=[i.serialize for i in active_surveys])
 
 class SurveyAdd(Resource):
     @jwt_required
@@ -119,14 +126,16 @@ class SurveyAdd(Resource):
 
         data = parser.parse_args()
 
+        boolActive = True if hasattr(data, 'isactive') and data['isactive'] == 'True' else False
+
         new_survey = Survey(
             name = data['name'],
             desc = data['desc'],
             dueDate = data['duedate'],
-            isActive = data['isactive'] if hasattr(data, 'isactive') else False,
+            isActive = boolActive,
             idUser = u.idUser
         )
-
+        print(new_survey)
         try:
             new_survey.save_to_db()
             return {'message': 'Survey {} was created'.format(data['name'])}
