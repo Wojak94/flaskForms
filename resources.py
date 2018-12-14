@@ -109,7 +109,7 @@ class SurveyActive(Resource):
     def get(self):
         active_surveys = Survey.query.filter(Survey.isActive == True, Survey.dueDate > datetime.now()).all()
         if not active_surveys:
-            return {'message': 'There is no active surveys'}
+            return {'message': 'There are no active surveys'}
         return jsonify(surveys=[i.serialize for i in active_surveys])
 
 class SurveyAdd(Resource):
