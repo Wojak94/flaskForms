@@ -16,6 +16,7 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
 [/logout/refresh](https://github.com/Wojak94/flaskForms/blob/master/README.md#logoutrefresh) |  POST | Refresh token | User logout of refresh token
 [/token/refresh](https://github.com/Wojak94/flaskForms/blob/master/README.md#tokenrefresh) | POST | Refresh token | Obtaining new access token with refresh token
 [/addsurvey](https://github.com/Wojak94/flaskForms/blob/master/README.md#addsurvey) | POST | Access token | Adding new survey
+[/getsurvey](https://github.com/Wojak94/flaskForms/blob/master/README.md#getsurvey) | GET | Access token | Getting list of logged user surveys
 [/users](https://github.com/Wojak94/flaskForms/blob/master/README.md#users) | GET/DELETE | None | Getting list of/deleting all users (debug/development usage)
 
 ## Usage
@@ -97,6 +98,25 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
 * Failure:
     
         message: "Something went wrong" (probably database access error)
+        
+### /getsurvey:
+    
+#### Returned json:
+* Success:
+
+        surveys: [
+                    {
+                        name: {name},
+                        isActive: {isActive},
+                        dueDate: {dueDate},
+                        subCount: {subCount},
+                        desc: {desc}
+                    }, ...
+                 ]  
+* Failure:
+    
+        message: "User {username} has no surveys"
+
 
 ### /users:
 
