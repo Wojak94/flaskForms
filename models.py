@@ -70,6 +70,7 @@ class Survey(db.Model):
     @property
     def serialize(self):
         return {
+            'id': self.idSurvey,
             'name': self.name,
             'isActive': self.isActive,
             'dueDate': self.dueDate,
