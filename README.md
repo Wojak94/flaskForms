@@ -125,6 +125,7 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
 
         surveys: [
                     {
+                        id: {id},
                         name: {name},
                         isActive: {isActive},
                         dueDate: {dueDate},
