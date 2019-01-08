@@ -95,6 +95,10 @@ class Question(db.Model):
 
     replies = db.relationship('Reply', backref='questions', lazy=True)
 
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
     def __repr__(self):
         return '<Question %r>' % self.content
 

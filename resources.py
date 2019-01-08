@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from models import User, Survey, RevokedTokenModel
+from models import User, Survey, Question, RevokedTokenModel
 from datetime import datetime
 from flask import jsonify
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
@@ -100,9 +100,11 @@ class SurveyGet(Resource):
     def get(self):
         current_username = get_jwt_identity()
         u = User.find_by_username(current_username)
+
         user_surveys = Survey.query.filter_by(idUser = u.idUser).all()
         if not user_surveys:
             return {'message': f'User {current_username} has no surveys'}
+
         return jsonify(surveys=[i.serialize for i in user_surveys])
 
 class SurveyActive(Resource):
@@ -135,13 +137,46 @@ class SurveyAdd(Resource):
             isActive = boolActive,
             idUser = u.idUser
         )
-        print(new_survey)
+
         try:
             new_survey.save_to_db()
             return {'message': 'Survey {} was created'.format(data['name'])}
         except:
             return {'message': 'Something went wrong'}, 500
 
+class QuestionAdd(Resource):
+    @jwt_required
+    def post(self):
+        current_username = get_jwt_identity()
+        u = User.find_by_username(current_username)
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('idSurvey', help = 'This field cannot be blank', required = True, location='headers')
+        parser.add_argument('content', location='headers')
+        parser.add_argument('type', help = 'This field cannot be blank', required = True, location='headers')
+
+        data = parser.parse_args()
+
+        requested_survey = Survey.query.get(data['idSurvey'])
+        if requested_survey is None:
+            return {'message': f'Survey doesn\'t exist'}
+
+        #Check if user is owner of that survey
+        if not (u.idUser == requested_survey.idUser):
+            return {'message': f'User {current_username} not permited'}
+
+        print(Survey.query.get(data['idSurvey']))
+        new_question = Question(
+            content = data['content'],
+            type = data['type'],
+            idSurvey = data['idSurvey'],
+        )
+
+        try:
+            new_question.save_to_db()
+            return {'message': 'Question was added'}
+        except:
+            return {'message': 'Something went wrong'}, 500
 
 class AllUsers(Resource):
     def get(self):
