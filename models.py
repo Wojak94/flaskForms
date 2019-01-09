@@ -82,6 +82,13 @@ class Survey(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def flush_to_db(self):
+        db.session.add(self)
+        db.session.flush()
+        
+    def commit_to_db(self):
+        db.session.commit()
+
     def __repr__(self):
         return '<Survey %r>' % self.name
 
@@ -95,6 +102,15 @@ class Question(db.Model):
 
     replies = db.relationship('Reply', backref='questions', lazy=True)
 
+    @property
+    def serialize(self):
+        return {
+            'id': self.idQuestion,
+            'content': self.content,
+            'type': self.type,
+            'replyContent': self.Content
+        }
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
@@ -107,6 +123,10 @@ class Reply(db.Model):
     idReply = db.Column(db.Integer, primary_key=True)
     idQuestion = db.Column(db.Integer, db.ForeignKey('questions.idQuestion'))
     reply = db.Column(JSON)
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
 
     def __repr__(self):
         return '<Question %r>' % self.content

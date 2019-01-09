@@ -1,3 +1,5 @@
+import json
+import ast
 from flask_restful import Resource, reqparse
 from models import User, Survey, Question, RevokedTokenModel
 from datetime import datetime
@@ -95,7 +97,7 @@ class TokenRefresh(Resource):
         access_token = create_access_token(identity = current_user)
         return {'access_token': access_token}
 
-class SurveyGet(Resource):
+class UserSurveysGet(Resource):
     @jwt_required
     def get(self):
         current_username = get_jwt_identity()
@@ -125,8 +127,12 @@ class SurveyAdd(Resource):
         parser.add_argument('desc', location='headers')
         parser.add_argument('duedate', help = 'This field cannot be blank', required = True, location='headers')
         parser.add_argument('isactive', location='headers')
+        parser.add_argument('questions', action='append')
 
         data = parser.parse_args()
+        print(type(data.questions[0]))
+        print(data.questions[0])
+        print(data.questions)
 
         boolActive = True if hasattr(data, 'isactive') and data['isactive'] == 'True' else False
 
@@ -139,10 +145,44 @@ class SurveyAdd(Resource):
         )
 
         try:
-            new_survey.save_to_db()
-            return {'message': 'Survey {} was created'.format(data['name'])}
+            new_survey.flush_to_db()
         except:
             return {'message': 'Something went wrong'}, 500
+
+        if not data.questions == None:
+
+            for i in data.questions:
+                dict = ast.literal_eval(i)
+                new_question = Question(
+                    content = dict['content'],
+                    type = dict['type'],
+                    idSurvey = new_survey.idSurvey
+                )
+                new_question.save_to_db()
+
+        new_survey.commit_to_db()
+        return {'message': 'Survey {} was created'.format(data['name'])}
+
+class SurveyGet(Resource):
+    @jwt_required
+    def get(self):
+        current_username = get_jwt_identity()
+        u = User.find_by_username(current_username)
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('idSurvey', help = 'This field cannot be blank', required = True, location='headers')
+
+        data = parser.parse_args()
+
+        requested_survey = Survey.query.get(data['idSurvey'])
+        if requested_survey is None:
+            return {'message': f'Survey doesn\'t exist'}
+
+        #Check if user is owner of that survey
+        if not (u.idUser == requested_survey.idUser):
+            return {'message': f'User {current_username} not permited'}
+
+        return jsonify(questions=[i.serialize for i in requested_survey.questions])
 
 class QuestionAdd(Resource):
     @jwt_required
@@ -165,16 +205,37 @@ class QuestionAdd(Resource):
         if not (u.idUser == requested_survey.idUser):
             return {'message': f'User {current_username} not permited'}
 
-        print(Survey.query.get(data['idSurvey']))
         new_question = Question(
             content = data['content'],
             type = data['type'],
-            idSurvey = data['idSurvey'],
+            idSurvey = data['idSurvey']
         )
 
         try:
             new_question.save_to_db()
             return {'message': 'Question was added'}
+        except:
+            return {'message': 'Something went wrong'}, 500
+
+class ReplyAdd(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('idQuestion', help = 'This field cannot be blank', required = True, location='headers')
+        parser.add_argument('reply', help = 'This field cannot be blank', required = True, location='headers')
+
+        data = parser.parse_args()
+
+        if Question.query.get(data['idQuestion']) is None:
+            return {'message': f'Question doesn\'t exist'}
+
+        new_reply = Reply(
+            idQuestion = data['idQuestion'],
+            reply = data['reply']
+        )
+
+        try:
+            new_reply.save_to_db()
+            return {'message': 'Reply was added'}
         except:
             return {'message': 'Something went wrong'}, 500
 

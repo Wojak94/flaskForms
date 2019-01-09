@@ -53,9 +53,11 @@ api.add_resource(resources.UserLogoutRefresh, '/logout/refresh')
 api.add_resource(resources.TokenRefresh, '/token/refresh')
 api.add_resource(resources.AllUsers, '/users')
 api.add_resource(resources.SurveyAdd, '/addsurvey')
-api.add_resource(resources.SurveyGet, '/getsurveys')
+api.add_resource(resources.SurveyGet, '/getsurvey')
+api.add_resource(resources.UserSurveysGet, '/getsurveys')
 api.add_resource(resources.SurveyActive, '/activesurveys')
 api.add_resource(resources.QuestionAdd, '/addquestion')
+api.add_resource(resources.ReplyAdd, '/addreply')
 
 if __name__ == '__main__':
     app.run()
