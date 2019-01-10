@@ -104,6 +104,7 @@ class Question(db.Model):
 
     @property
     def serialize(self):
+
         return {
             'id': self.idQuestion,
             'content': self.content,

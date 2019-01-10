@@ -189,7 +189,7 @@ class QuestionAdd(Resource):
 
         parser = reqparse.RequestParser()
         parser.add_argument('idSurvey', help = 'This field cannot be blank', required = True, location='headers')
-        parser.add_argument('content', location='headers')
+        parser.add_argument('content', help = 'This field cannot be blank', required = True, location='headers')
         parser.add_argument('type', help = 'This field cannot be blank', required = True, location='headers')
 
         data = parser.parse_args()
