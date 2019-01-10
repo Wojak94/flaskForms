@@ -17,7 +17,10 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
 [/token/refresh](https://github.com/Wojak94/flaskForms/blob/master/README.md#tokenrefresh) | POST | Refresh token | Obtaining new access token with refresh token
 [/addsurvey](https://github.com/Wojak94/flaskForms/blob/master/README.md#addsurvey) | POST | Access token | Adding new survey
 [/getsurveys](https://github.com/Wojak94/flaskForms/blob/master/README.md#getsurveys) | GET | Access token | Getting list of logged user surveys
+[/getsurveyquestions](https://github.com/Wojak94/flaskForms/blob/master/README.md#getsurveyquestions) | GET | None | Get list of questions by the id of survey
 [/activesurveys](https://github.com/Wojak94/flaskForms/blob/master/README.md#activesurveys) | GET | None | Getting list of all active surveys
+[/addquestion](https://github.com/Wojak94/flaskForms/blob/master/README.md#addquestion) | POST | Access token | Adding question to existing user survey
+[/addreply](https://github.com/Wojak94/flaskForms/blob/master/README.md#addreply) | POST | None | Adding reply to a specified question
 [/users](https://github.com/Wojak94/flaskForms/blob/master/README.md#users) | GET/DELETE | None | Getting list of/deleting all users (debug/development usage)
 
 ## Usage
@@ -92,6 +95,7 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
     desc
     duedate (required)
     isactive
+    questions (located in a request body)
 #### Returned json:
 * Success:
 
@@ -100,9 +104,26 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
     
         message: "Something went wrong" (probably database access error)
         
-### /getsurveys:
-    
+### /getsurveyquestions:
+
+#### Accepted parameters:
+    idSurvey (required)    
 #### Returned json:
+* Success:
+
+        questions: [
+                    {
+                        content: {content},
+                        id: {idQuestion},
+                        replyContent: {replyContent},
+                        type: {type}
+                    }, ...
+                 ]  
+* Failure:
+    
+        message: "Survey doesn't exist" (if given idSurvey doesn't exist in database)
+        
+### /getsurveys:
 * Success:
 
         surveys: [
@@ -117,7 +138,6 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
 * Failure:
     
         message: "User {username} has no surveys"
-        
 ### /activesurveys:
     
 #### Returned json:
@@ -137,8 +157,37 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
     
         message: "There are no active surveys"
         
+### /addquestion:
 
+#### Accepted parameters:
+    idSurvey (required)  
+    content (required)
+    type (required)
+    
+#### Returned json:
+* Success:
 
+        message: "Question was added"
+* Failure:
+    
+        message: "Survey doesn't exist" (if given idSurvey doesn't exist in database)
+        message: "User {current_username} not permited" (if id of requesting user doesn't match survey owner's id)
+        message: "Something went wrong" (internal server error, 500)
+
+### /replyadd:
+
+#### Accepted parameters:
+    idQuestion (required)  
+    reply (required)
+#### Returned json:
+
+* Success:
+
+        message: "Reply was added"
+* Failure:
+    
+        message: "Question doesn't exist" (if given idQuestion doesn't exist in database)
+        message: "Something went wrong" (internal server error, 500)    
 ### /users:
 
 No parameters required, just plain GET/DELETE request.
