@@ -1,7 +1,7 @@
 import json
 import ast
 from flask_restful import Resource, reqparse
-from models import User, Survey, Question, RevokedTokenModel
+from models import User, Survey, Question, Reply, RevokedTokenModel
 from datetime import datetime
 from flask import jsonify
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
@@ -40,7 +40,6 @@ class UserRegistration(Resource):
         except:
             return {'message': 'Something went wrong'}, 500
 
-
 class UserLogin(Resource):
 
     def post(self):
@@ -64,7 +63,6 @@ class UserLogin(Resource):
                 }
         else:
             return {'message': 'Wrong credentials'}
-
 
 class UserLogoutAccess(Resource):
     @jwt_required
@@ -130,9 +128,6 @@ class SurveyAdd(Resource):
         parser.add_argument('questions', action='append')
 
         data = parser.parse_args()
-        print(type(data.questions[0]))
-        print(data.questions[0])
-        print(data.questions)
 
         boolActive = True if hasattr(data, 'isactive') and data['isactive'] == 'True' else False
 
@@ -153,9 +148,11 @@ class SurveyAdd(Resource):
 
             for i in data.questions:
                 dict = ast.literal_eval(i)
+                print(dict)
                 new_question = Question(
                     content = dict['content'],
                     type = dict['type'],
+                    replyContent = dict['replyContent'],
                     idSurvey = new_survey.idSurvey
                 )
                 new_question.save_to_db()
@@ -163,11 +160,11 @@ class SurveyAdd(Resource):
         new_survey.commit_to_db()
         return {'message': 'Survey {} was created'.format(data['name'])}
 
-class SurveyGet(Resource):
-    @jwt_required
+class SurveyQuestionsGet(Resource):
+    # @jwt_required
     def get(self):
-        current_username = get_jwt_identity()
-        u = User.find_by_username(current_username)
+        # current_username = get_jwt_identity()
+        # u = User.find_by_username(current_username)
 
         parser = reqparse.RequestParser()
         parser.add_argument('idSurvey', help = 'This field cannot be blank', required = True, location='headers')
@@ -178,9 +175,9 @@ class SurveyGet(Resource):
         if requested_survey is None:
             return {'message': f'Survey doesn\'t exist'}
 
-        #Check if user is owner of that survey
-        if not (u.idUser == requested_survey.idUser):
-            return {'message': f'User {current_username} not permited'}
+        # #Check if user is owner of that survey
+        # if not (u.idUser == requested_survey.idUser):
+        #     return {'message': f'User {current_username} not permited'}
 
         return jsonify(questions=[i.serialize for i in requested_survey.questions])
 
