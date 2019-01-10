@@ -208,7 +208,8 @@ class QuestionAdd(Resource):
         new_question = Question(
             content = data['content'],
             type = data['type'],
-            idSurvey = data['idSurvey']
+            idSurvey = data['idSurvey'],
+            replyContent = data['replyContent']
         )
 
         try:

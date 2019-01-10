@@ -85,7 +85,7 @@ class Survey(db.Model):
     def flush_to_db(self):
         db.session.add(self)
         db.session.flush()
-        
+
     def commit_to_db(self):
         db.session.commit()
 
@@ -108,7 +108,7 @@ class Question(db.Model):
             'id': self.idQuestion,
             'content': self.content,
             'type': self.type,
-            'replyContent': self.Content
+            'replyContent': self.replyContent
         }
 
     def save_to_db(self):
