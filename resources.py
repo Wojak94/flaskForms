@@ -140,6 +140,11 @@ class SurveyAdd(Resource):
         )
 
         try:
+            print(  new_survey.name,
+                    new_survey.desc,
+                    new_survey.dueDate,
+                    new_survey.isActive,
+                    new_survey.idUser)
             new_survey.flush_to_db()
         except:
             return {'message': 'Something went wrong'}, 500
