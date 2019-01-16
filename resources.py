@@ -149,6 +149,8 @@ class SurveyAdd(Resource):
         except:
             return {'message': 'Something went wrong'}, 500
 
+        print("Survey zapisany, teraz questions")
+
         if not data.questions == None:
 
             for i in data.questions:
