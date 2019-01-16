@@ -145,7 +145,7 @@ class SurveyAdd(Resource):
                     new_survey.dueDate,
                     new_survey.isActive,
                     new_survey.idUser)
-            new_survey.flush_to_db()
+            new_survey.save_to_db()
         except:
             return {'message': 'Something went wrong'}, 500
 
