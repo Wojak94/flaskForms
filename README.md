@@ -62,6 +62,27 @@ python manage.py runserver
 ```
 Default server address is `http://localhost:5000/`.
 
+### PostgreSQL database
+Depending on the system install PostgreSQL from repository/gui installer/other sources. On the Linux, you should be able to enter posgresql console with:
+```
+sudo -u postgres psql
+```
+Now as your are in `psql` console, create database, user and handle db privilages to him with:
+```
+create database {YOUR_DATABASE_NAME};
+create user {YOUR_DB_USER_NAME} with encrypted password {YOUR_DB_PASSWORD};
+grant all privileges on database {YOUR_DATABASE_NAME} to {YOUR_DB_USER_NAME};
+```
+Don't forget the semicolons at the end!  
+Exit `psql` console, with `\q` and enter your application virutal environment. Export `$DATABASE_URL` variable with following pattern:
+```
+export DATABASE_URL='postgresql://{YOUR_DB_USER_NAME}:{YOUR_DB_PASSWORD}@localhost:5432/{YOUR_DATABASE_NAME}'
+```
+Port `5432` is default for PostgreSQL, so if its different for you, change it accordingly. For personal convinience apply changes to `venv/bin/activate` like with environment variables in the previous set. Also, if you previously commented that line in `app.py`, uncomment it:
+```
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+```
+
 ## Current API endpoints
 
 PATH | METHOD | TOKEN PROTECTION | PURPOSE
