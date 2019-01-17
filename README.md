@@ -78,11 +78,25 @@ Exit `psql` console, with `\q` and enter your application virutal environment. E
 ```
 export DATABASE_URL='postgresql://{YOUR_DB_USER_NAME}:{YOUR_DB_PASSWORD}@localhost:5432/{YOUR_DATABASE_NAME}'
 ```
-Port `5432` is default for PostgreSQL, so if its different for you, change it accordingly. For personal convinience apply changes to `venv/bin/activate` like with environment variables in the previous set. Also, if you previously commented that line in `app.py`, uncomment it:
+Port `5432` is default for PostgreSQL, so if its different for you change it accordingly. For personal convinience apply changes to `venv/bin/activate` like with environment variables in the previous step. Also, if you previously commented that line in `app.py` now uncomment it:
 ```
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 ```
+At that point, Flask application should be content with all environment variables set, so the only step left is to migrate database model from application to newly created PostgreSQL database.
+It is done with `Flask-Migrate` and `Alembic`. Being in venv, you should be able to run:
+```
+python manage.py db upgrade
+```
+That command will apply all migrations from `migrations/versions/` to PostgreSQL database. If you encounter any problems at this step, try deleting `migrations/` folder and run:
+```
+python manage.py db init
+python manage.py db migrate
+python manage.py db upgrade
+```
+It should create new `migrations/` folder, generate migration from current flask database model, and apply it to the PostgreSQL database.  
 
+
+If everything went as intended, congratulations! You have your own version of application running localy!
 ## Current API endpoints
 
 PATH | METHOD | TOKEN PROTECTION | PURPOSE
