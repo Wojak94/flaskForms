@@ -6,6 +6,28 @@ Backend for survey creation application written in Flask and Flask-sqlalchemy, d
 API is written with Flask-RESTful library, providing user authentication with Flask-JWT-extended. Upon user registrarion/login 2 tokens are created: access and refresh, that lasts 15 min and 30 days respectivly.
 Accessing token&#8209;protected endpoints requires `Authorization` parameter in header of https request, with `Bearer {token}` value. Request parameters should be passed in header section. User logout is performed as two POST requests to `/logout/access` and `/logout/refresh`, which adds passed tokens to a blacklist.
 
+## Environment setup
+Environment for the application is realized with python `venv` package that provides virutal environment, containing isolated python packages and python binary. To create virtual environment, execute command:
+```
+python3 -m venv /path/to/new/virtual/environment
+```
+To enter created virtual environment in POSIX system with bash/zsh shell, type:
+```
+source <venv>/bin/activate
+```
+Personally I prefer to create alias to that command, like `alias vv='source <venv>/bin/activate'` since you'll be using it rather frequently. I also recommend to update bootstraped pip package with:
+```
+pip install --upgrade pip
+```
+While you are in your venv all packages used by the applications are saved in requirements.txt file and can be installed with:
+```
+pip install -r requirements.txt
+```
+To update package list with newly installed packages use:
+```
+pip freeze -l > requirements.txt
+```
+
 ## Current API endpoints
 
 PATH | METHOD | TOKEN PROTECTION | PURPOSE
