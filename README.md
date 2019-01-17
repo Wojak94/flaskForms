@@ -41,7 +41,7 @@ Generate and export `$JWT_SECRET_KEY` respectivly.
 
 **IMPORTANT: Do NOT copy generated keys from example, generate it by yourself!**  
 
-For some quality of life improvment I also advice you to include `export` commands at the end of `venv/bin/activate` script to set that env variables automaticly as you source into the virtual environment. However, as far as I know this is not really recommended practice, but couldn't come up with better solution. Also, don't forget to clear them as they will preserve through terminal session, even if you deactivate your virtual environment. Copy that into `deactivate()` function in `venv/bin/activate':
+For some quality of life improvment I also advice you to include `export` commands at the end of `venv/bin/activate` script to set that env variables automaticly as you source into the virtual environment. However, as far as I know this is not really recommended practice, but couldn't come up with better solution. Also, don't forget to clear them as they will preserve through terminal session, even if you deactivate your virtual environment. Copy that into `deactivate()` function in `venv/bin/activate`:
 
 ```
     if [ -n "${SECRET_KEY:-}" ] ; then
