@@ -73,10 +73,14 @@ class Survey(db.Model):
             'id': self.idSurvey,
             'name': self.name,
             'isActive': self.isActive,
-            'dueDate': self.dueDate,
+            'dueDate': str(self.dueDate),
             'subCount': self.subCount,
             'desc': self.desc
         }
+
+    @classmethod
+    def find_by_id(cls, id):
+        return cls.query.filter_by(idSurvey = id).first()
 
     def save_to_db(self):
         db.session.add(self)
@@ -104,13 +108,16 @@ class Question(db.Model):
 
     @property
     def serialize(self):
-
         return {
             'id': self.idQuestion,
             'content': self.content,
             'type': self.type,
             'replyContent': self.replyContent
         }
+
+    @classmethod
+    def count_replies(cls, id):
+        return db.session.query(Reply).filter(Reply.idQuestion == id).count()
 
     def save_to_db(self):
         db.session.add(self)
@@ -130,7 +137,7 @@ class Reply(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return '<Question %r>' % self.content
+        return '<Reply %r>' % self.reply
 
 class RevokedTokenModel(db.Model):
     __tablename__ = 'revoked_tokens'

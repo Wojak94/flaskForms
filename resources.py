@@ -145,7 +145,7 @@ class SurveyAdd(Resource):
                     new_survey.dueDate,
                     new_survey.isActive,
                     new_survey.idUser)
-            new_survey.save_to_db()
+            new_survey.flush_to_db()
         except:
             return {'message': 'Something went wrong'}, 500
 
@@ -181,10 +181,6 @@ class SurveyQuestionsGet(Resource):
         requested_survey = Survey.query.get(data['idSurvey'])
         if requested_survey is None:
             return {'message': f'Survey doesn\'t exist'}
-
-        # #Check if user is owner of that survey
-        # if not (u.idUser == requested_survey.idUser):
-        #     return {'message': f'User {current_username} not permited'}
 
         return jsonify(questions=[i.serialize for i in requested_survey.questions])
 
@@ -226,7 +222,7 @@ class ReplyAdd(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('idQuestion', help = 'This field cannot be blank', required = True, location='headers')
-        parser.add_argument('reply', help = 'This field cannot be blank', required = True, location='headers')
+        parser.add_argument('reply', help = 'This field cannot be blank', required = True)
 
         data = parser.parse_args()
 
@@ -243,6 +239,32 @@ class ReplyAdd(Resource):
             return {'message': 'Reply was added'}
         except:
             return {'message': 'Something went wrong'}, 500
+
+class GetSurveyStats(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('id', help = 'This field cannot be blank', required = True, location='headers')
+
+        data = parser.parse_args()
+
+        survey = Survey.find_by_id(data['id'])
+        if not survey:
+            return {'message': f"Survey {data['id']} doesn\'t exist"}
+
+        stats = []
+
+        for i, q in enumerate(survey.questions):
+            q_stat = {
+                'id': q.idQuestion,
+                'type': q.type,
+                'votes': q.count_replies(q.idQuestion),
+                'content': q.content,
+                'answers': [x.reply for x in q.replies]
+            }
+            stats.append(q_stat)
+
+        return stats
+
 
 class AllUsers(Resource):
     def get(self):

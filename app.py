@@ -57,6 +57,7 @@ api.add_resource(resources.SurveyQuestionsGet, '/getsurveyquestions')
 api.add_resource(resources.UserSurveysGet, '/getsurveys')
 api.add_resource(resources.SurveyActive, '/activesurveys')
 api.add_resource(resources.QuestionAdd, '/addquestion')
+api.add_resource(resources.GetSurveyStats, '/getsurveystats')
 api.add_resource(resources.ReplyAdd, '/addreply')
 
 if __name__ == '__main__':
