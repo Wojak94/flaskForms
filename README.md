@@ -6,6 +6,97 @@ Backend for survey creation application written in Flask and Flask-sqlalchemy, d
 API is written with Flask-RESTful library, providing user authentication with Flask-JWT-extended. Upon user registrarion/login 2 tokens are created: access and refresh, that lasts 15 min and 30 days respectivly.
 Accessing token&#8209;protected endpoints requires `Authorization` parameter in header of https request, with `Bearer {token}` value. Request parameters should be passed in header section. User logout is performed as two POST requests to `/logout/access` and `/logout/refresh`, which adds passed tokens to a blacklist.
 
+## Environment setup
+
+### Venv and application 
+First of all, clone project repository, and `cd` to it with:
+```
+git clone https://github.com/Wojak94/flaskForms
+cd flaskFroms/
+```
+Environment for the application is realized with python `venv` package that provides virutal environment, containing isolated python packages and python binary. To create virtual environment, execute command:
+```
+python3 -m venv venv
+```
+That will create new `venv/` folder.
+To enter created virtual environment in POSIX system with bash/zsh shell, type:
+```
+source venv/bin/activate
+```
+Personally I prefer to create alias to that command, like `alias vv='source venv/bin/activate'` since you'll be using it rather frequently. I also recommend to update venv bootstraped pip package with:
+```
+pip install --upgrade pip
+```
+While you are in your venv, install all packages used by the application, that are saved in requirements.txt with:
+```
+pip install -r requirements.txt
+```
+After installing requred packages you need to setup some environment variables used by the application. Generate and export `$SECRET_KEY` like this:
+```
+$ python3 -c 'import os; print(os.urandom(16))'
+b'\x8d\x92\xa4\r\xb9.rO<5\x01\x92\x83\xab\x8f\xf4'
+$ export SECRET_KEY='\x8d\x92\xa4\r\xb9.rO<5\x01\x92\x83\xab\x8f\xf4'
+```
+Generate and export `$JWT_SECRET_KEY` respectivly.  
+
+**IMPORTANT: Do NOT copy generated keys from example, generate them by yourself!**  
+
+For some quality of life improvment I also advice you to include `export` commands at the end of `venv/bin/activate` script to set that env variables automaticly as you source into the virtual environment. However, as far as I know this is not really recommended practice, but couldn't come up with better solution. Also, don't forget to clear them as they will preserve through terminal session, even if you deactivate your virtual environment. Copy that into `deactivate()` function in `venv/bin/activate`:
+
+```
+    if [ -n "${SECRET_KEY:-}" ] ; then
+        unset SECRET_KEY
+    fi
+    if [ -n "${JWT_SECRET_KEY:-}" ] ; then
+        unset JWT_SECRET_KEY
+    fi
+```
+
+Now the application itself is ready to run and could be started, if you comment that line in `app.py`:
+```
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+```
+However, as you might noticed we had to do that because there is no database for app to connect to. Sending any request to application will surely result with an error. Apart from that, you can run local server with flask application with:
+```
+python manage.py runserver
+```
+Default server address is `http://localhost:5000/`.
+
+### PostgreSQL database
+Depending on the system install PostgreSQL from repository/gui installer/other sources. On the Linux, you should be able to enter posgresql console with:
+```
+sudo -u postgres psql
+```
+Now as your are in `psql` console, create database, user and handle db privilages to him with:
+```
+create database {YOUR_DATABASE_NAME};
+create user {YOUR_DB_USER_NAME} with encrypted password {YOUR_DB_PASSWORD};
+grant all privileges on database {YOUR_DATABASE_NAME} to {YOUR_DB_USER_NAME};
+```
+Don't forget the semicolons at the end!  
+Exit `psql` console, with `\q` and enter your application virutal environment. Export `$DATABASE_URL` variable with following pattern:
+```
+export DATABASE_URL='postgresql://{YOUR_DB_USER_NAME}:{YOUR_DB_PASSWORD}@localhost:5432/{YOUR_DATABASE_NAME}'
+```
+Port `5432` is default for PostgreSQL, so if its different for you change it accordingly. For personal convinience apply changes to `venv/bin/activate` like with environment variables in the previous step. Also, if you previously commented that line in `app.py` now uncomment it:
+```
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+```
+At that point, Flask application should be content with all environment variables set, so the only step left is to migrate database model from application to newly created PostgreSQL database.
+It is done with `Flask-Migrate` and `Alembic`. Being in venv, you should be able to run:
+```
+python manage.py db upgrade
+```
+That command will apply all migrations from `migrations/versions/` to PostgreSQL database. If you encounter any problems at this step, try deleting `migrations/` folder and run:
+```
+python manage.py db init
+python manage.py db migrate
+python manage.py db upgrade
+```
+It should create new `migrations/` folder, generate migration from current flask database model, and apply it to the PostgreSQL database.  
+
+
+If everything went as intended, congratulations! You have your own version of application running localy!
 ## Current API endpoints
 
 PATH | METHOD | TOKEN PROTECTION | PURPOSE
