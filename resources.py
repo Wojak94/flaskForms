@@ -140,11 +140,6 @@ class SurveyAdd(Resource):
         )
 
         try:
-            print(  new_survey.name,
-                    new_survey.desc,
-                    new_survey.dueDate,
-                    new_survey.isActive,
-                    new_survey.idUser)
             new_survey.flush_to_db()
         except:
             return {'message': 'Something went wrong'}, 500
@@ -194,6 +189,7 @@ class QuestionAdd(Resource):
         parser.add_argument('idSurvey', help = 'This field cannot be blank', required = True, location='headers')
         parser.add_argument('content', help = 'This field cannot be blank', required = True, location='headers')
         parser.add_argument('type', help = 'This field cannot be blank', required = True, location='headers')
+        parser.add_argument('replyContent', action='append')
 
         data = parser.parse_args()
 
@@ -205,6 +201,7 @@ class QuestionAdd(Resource):
         if not (u.idUser == requested_survey.idUser):
             return {'message': f'User {current_username} not permited'}
 
+        print(data['replyContent'])
         new_question = Question(
             content = data['content'],
             type = data['type'],
