@@ -265,7 +265,7 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
         message: "User {current_username} not permited" (if id of requesting user doesn't match survey owner's id)
         message: "Something went wrong" (internal server error, 500)
 
-### /replyadd:
+### /addreply:
 
 #### Accepted parameters:
     idQuestion (required)  
