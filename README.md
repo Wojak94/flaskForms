@@ -97,6 +97,9 @@ It should create new `migrations/` folder, generate migration from current flask
 
 
 If everything went as intended, congratulations! You have your own version of application running localy!
+## Known issues
+
+In `/addsurvey` endpoint passing questions as JSON in request body doesn't work in Heroku environment, only localy. It's probably associated with flushing survey instance (`new_survey.flush_to_db()`), before creating questions to that survey. Due to limited debugging capabilities it a free version of Heorku service I couldn't resolve that problem.
 ## Current API endpoints
 
 PATH | METHOD | TOKEN PROTECTION | PURPOSE
