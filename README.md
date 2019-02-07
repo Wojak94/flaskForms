@@ -186,7 +186,7 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
     desc
     duedate (required)
     isactive
-    questions (located in a request body)
+    questions (JSON located in a request body)
 #### Returned json:
 * Success:
 
@@ -254,6 +254,7 @@ PATH | METHOD | TOKEN PROTECTION | PURPOSE
     idSurvey (required)  
     content (required)
     type (required)
+    replyContent (JSON located in request body)
     
 #### Returned json:
 * Success:
